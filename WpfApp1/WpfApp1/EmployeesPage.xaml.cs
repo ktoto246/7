@@ -100,10 +100,20 @@ namespace WpfApp1
             {
                 if (MessageBox.Show($"Удалить сотрудника '{selectedEmployee.FullName}'?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
-                    _context.Employees.Remove(selectedEmployee);
-                    _context.SaveChanges();
-                    ClearFields();
-                    LoadData(TxtSearch.Text.Trim());
+                    try
+                    {
+                        _context.Employees.Remove(selectedEmployee);
+                        _context.SaveChanges();
+                        ClearFields();
+                        LoadData(TxtSearch.Text.Trim());
+                    }
+                    catch (Microsoft.EntityFrameworkCore.DbUpdateException)
+                    {
+                        MessageBox.Show("Невозможно удалить сотрудника, так как за ним закреплены сделки. Сначала удалите связанные сделки.",
+                                        "Ошибка удаления", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                        _context.Entry(selectedEmployee).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+                    }
                 }
             }
         }

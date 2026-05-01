@@ -111,16 +111,22 @@ namespace WpfApp1
         {
             if (DataGridClients.SelectedItem is Client selectedClient)
             {
-                var result = MessageBox.Show($"Вы действительно хотите удалить клиента '{selectedClient.CompanyName}'?\n\nВнимание: Все связанные с ним сделки также могут быть удалены.",
-                                             "Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-                if (result == MessageBoxResult.Yes)
+                if (MessageBox.Show($"Удалить клиента '{selectedClient.CompanyName}'?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
-                    _context.Clients.Remove(selectedClient);
-                    _context.SaveChanges();
+                    try
+                    {
+                        _context.Clients.Remove(selectedClient);
+                        _context.SaveChanges();
+                        ClearFields();
+                        LoadData(TxtSearch.Text.Trim());
+                    }
+                    catch (Microsoft.EntityFrameworkCore.DbUpdateException)
+                    {
+                        MessageBox.Show("Невозможно удалить клиента, так как с ним существуют оформленные сделки. Сначала удалите связанные сделки.",
+                                        "Ошибка удаления", MessageBoxButton.OK, MessageBoxImage.Error);
 
-                    ClearFields();
-                    LoadData(TxtSearch.Text.Trim());
+                        _context.Entry(selectedClient).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+                    }
                 }
             }
             else

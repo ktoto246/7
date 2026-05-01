@@ -101,10 +101,20 @@ namespace WpfApp1
             {
                 if (MessageBox.Show($"Удалить продукт '{selectedProduct.ProductName}'?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
-                    _context.Products.Remove(selectedProduct);
-                    _context.SaveChanges();
-                    ClearFields();
-                    LoadData(TxtSearch.Text.Trim());
+                    try
+                    {
+                        _context.Products.Remove(selectedProduct);
+                        _context.SaveChanges();
+                        ClearFields();
+                        LoadData(TxtSearch.Text.Trim());
+                    }
+                    catch (Microsoft.EntityFrameworkCore.DbUpdateException)
+                    {
+                        MessageBox.Show("Невозможно удалить продукт, так как по нему существуют оформленные сделки. Сначала удалите связанные сделки.",
+                                        "Ошибка удаления", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                        _context.Entry(selectedProduct).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+                    }
                 }
             }
         }

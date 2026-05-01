@@ -171,3 +171,4 @@ D:\Курсовые\Радмир\WpfApp1\WpfApp1\bin\Debug\net8.0-windows\runtim
 D:\Курсовые\Радмир\WpfApp1\WpfApp1\bin\Debug\net8.0-windows\runtimes\win-x86\native\libSkiaSharp.dll
 D:\Курсовые\Радмир\WpfApp1\WpfApp1\obj\Debug\net8.0-windows\AnalyticsPage.baml
 D:\Курсовые\Радмир\WpfApp1\WpfApp1\obj\Debug\net8.0-windows\AnalyticsPage.g.cs
+D:\Курсовые\Радмир\WpfApp1\WpfApp1\obj\Debug\net8.0-windows\WpfApp1.sourcelink.json
